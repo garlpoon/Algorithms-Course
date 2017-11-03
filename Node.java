@@ -8,6 +8,6 @@
 
 public class Node {
    boolean stat;
-   int row_val;
-   int col_val;
+   int row;
+   int col;
 }
