@@ -34,8 +34,6 @@ public class Percolation {
            // connect branches => check north, south, east, west
            // check the range, then see if they're open, if so, use quick union to match the row, col
            
-                      
-           
        }
        else throw new IllegalArgumentException();
    }
@@ -104,14 +102,12 @@ public class Percolation {
    
    private boolean rangeCheck(int row, int col, int min, int max) // does value fit between range?
    {
-       if(singleCheck(row, min, max) && singleCheck(col, min, max)) return true;
-       else return false;
+       return singleCheck(row, min, max) && singleCheck(col, min, max);
    }
    
    private boolean singleCheck(int val, int min, int max)
    {
-       if(min <= val && val <= max) return true;
-       else return false;
+       return min <= val && val <= max;
    }
    
    public void outputRoots()
@@ -133,8 +129,8 @@ public class Percolation {
    public static void main(String[] args) // test client (optional)
    {
        Percolation myPerc = new Percolation(9);
-       myPerc.open(1,3);
-       myPerc.isFull(2, 5);
+       myPerc.open(1,9);
+       myPerc.isFull(1, 9);
        myPerc.isOpen(1, 1);
        
        myPerc.outputRoots();
