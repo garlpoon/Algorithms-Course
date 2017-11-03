@@ -44,7 +44,9 @@ public class Percolation {
        if(rangeCheck(row, col, 0, val))
        {
            grid[row][col].stat = true;
-       }   
+           
+           // connect branches, while you're at it
+       }
        else
        {
            throw new IllegalArgumentException();
@@ -55,7 +57,7 @@ public class Percolation {
    {
        if(rangeCheck(row, col, 0, val))
        {
-           return false;
+           return grid[row][col].stat;
        }   
        else
        {
@@ -63,11 +65,13 @@ public class Percolation {
        }
    }
    
-   public boolean isFull(int row, int col) // is site (row, col) full?
+   public boolean isFull(int row, int col) // is site (row, col) connected to a node from top row?
    {
        if(rangeCheck(row, col, 0, val))
        {
-           return false;
+           // need to check if the node is connected to a top row node. grid[0][0-n]
+           
+           
        }   
        else
        {
@@ -94,6 +98,8 @@ public class Percolation {
    
    public boolean percolates() // does the system percolate?
    {
+       // scan top row to see if any are connected to bottom row
+       
        return true;
    }
    
