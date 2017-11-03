@@ -17,8 +17,6 @@ public class Percolation {
    
    public Percolation(int n) // create n-by-n grid, with all sites blocked
    {
-       int cnt = 0;
-       
        if(n < 1)
            throw new IllegalArgumentException();
        
@@ -29,12 +27,13 @@ public class Percolation {
        {
            for(int j=0; j < n; j++)
            {
-               grid[i][j] = new Node(); // Each Node in the array needs initialization               
-               grid[i][j].link_val = cnt;
-               grid[i][j].stat = false;
-               cnt++;
-               
-               // System.out.println(grid[i][j].link_val);
+               grid[i][j] = new Node(i, j); // Each Node in the array needs initialization               
+               //grid[i][j].row = i;
+               //grid[i][j].col = j;
+               //grid[i][j].stat = false;
+               System.out.println("-----------------------------");
+               System.out.println(grid[i][j].row);
+               System.out.println(grid[i][j].col);
            }
        }
    }
@@ -47,9 +46,17 @@ public class Percolation {
            grid[row][col].stat = true;
            
            // connect branches => check north, south, east, west
+           // check the range, then see if they're open, if so, use quick union to match the link_vals
+           
            
        }
        else throw new IllegalArgumentException();
+   }
+   
+   public Node root(int row, int col)
+   {
+       while(grid[row][col].row != row && grid[row][col].col != col);
+       return new Node(row, col);                  
    }
    
    public boolean isOpen(int row, int col) // is site (row, col) open?
@@ -114,6 +121,7 @@ public class Percolation {
        myPerc.isFull(2, 5);
        myPerc.isOpen(1, 1);
        
+       System.out.println("-----------------------------");
        System.out.println("Percolation Check Complete");
    }            
 }
