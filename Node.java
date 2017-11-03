@@ -7,13 +7,13 @@
 // http://coursera.cs.princeton.edu/algs4/assignments/percolation.html
 
 public class Node {
-   boolean stat;
+	
+   boolean stat = false;
    int row;
    int col;
    
    Node(int r, int c)
    {
-       stat = false;
        row = r;
        col = c;
    }
