@@ -18,23 +18,10 @@ public class Percolation {
    public Percolation(int n) // create n-by-n grid, with all sites blocked
    {
        if(n < 1) throw new IllegalArgumentException();
-       
        grid = new Node[n][n]; 
        val = n;
        
-       for(int i=0; i < n; i++)
-       {
-           for(int j=0; j < n; j++)
-           {
-               grid[i][j] = new Node(i, j); // Node initialization
-               
-               /*
-               System.out.println("-----------------------------");
-               System.out.println(grid[i][j].row);
-               System.out.println(grid[i][j].col);
-               */
-           }
-       }
+       for(int i=0; i < n; i++) for(int j=0; j < n; j++) grid[i][j] = new Node(i, j);
    }
   
    public void open(int row, int col) // open site (row, col) if it is not open already
@@ -67,6 +54,7 @@ public class Percolation {
    
    public void union(Node p, Node q)
    {
+       // to-do: implement a union system where the bigger sized tree hooks onto the smaller sized tree
        Node i = root(p);
        grid[i.row][i.col]= root(q);
    }
@@ -128,6 +116,10 @@ public class Percolation {
    
    public void outputRoots()
    {
+       union(grid[0][1], grid[0][0]);
+       union(grid[0][1], grid[5][0]);
+       union(grid[2][5], grid[5][0]);
+       
        for(int i=0;i<val;i++)
        {
            for(int j=0;j<val;j++)
