@@ -10,4 +10,11 @@ public class Node {
    boolean stat;
    int row;
    int col;
+   
+   Node(int r, int c)
+   {
+       stat = false;
+       row = r;
+       col = c;
+   }
 }
