@@ -41,37 +41,40 @@ public class Percolation {
    public void open(int row, int col) // open site (row, col) if it is not open already
    {
        Side status = edgeDetect(row, col);
-       
-       if(rangeCheck(row, col, 1, val))
+       if(grid[row-1][col-1].stat == false)
        {
-           row--; col--; // adjust for arrays
-           grid[row][col].stat = true;
-           
-           if(status != Side.UR && status != Side.LR && status != Side.MR)
+           if(rangeCheck(row, col, 1, val))
            {
-               //System.out.println("r + 1 -> currently: " + row + ", " + col);
-               if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
+               row--; col--; // adjust for arrays
+               grid[row][col].stat = true;
+               
+               if(status != Side.UR && status != Side.LR && status != Side.MR)
+               {
+                   //System.out.println("r + 1 -> currently: " + row + ", " + col);
+                   if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
+               }
+               
+               if(status != Side.UL && status != Side.LL && status != Side.ML)
+               {
+                   //System.out.println("r - 1 -> currently: " + row + ", " + col);
+                   if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);
+               }   
+               
+               if(status != Side.LL && status != Side.LR && status != Side.LM)
+               {
+                   //System.out.println("c + 1 -> currently: " + row + ", " + col);
+                   if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
+               }              
+               
+               if(status != Side.UL && status != Side.UR && status != Side.UM)
+               {
+                   //System.out.println("c - 1 -> currently: " + row + ", " + col);
+                   if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
+               }   
            }
-           
-           if(status != Side.UL && status != Side.LL && status != Side.ML)
-           {
-               //System.out.println("r - 1 -> currently: " + row + ", " + col);
-               if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);
-           }   
-           
-           if(status != Side.LL && status != Side.LR && status != Side.LM)
-           {
-               //System.out.println("c + 1 -> currently: " + row + ", " + col);
-               if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
-           }              
-           
-           if(status != Side.UL && status != Side.UR && status != Side.UM)
-           {
-               //System.out.println("c - 1 -> currently: " + row + ", " + col);
-               if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
-           }   
+           else throw new IllegalArgumentException();
        }
-       else throw new IllegalArgumentException();
+
    }
    
    private Side edgeDetect(int row, int col)
@@ -83,7 +86,7 @@ public class Percolation {
        
        if(col >= val) y = Status.HIGH;
        else if(col <= 1) y = Status.LOW;
-       /*
+       
        if(x == Status.HIGH && y == Status.HIGH)
            return Side.LR;
        else if(x == Status.LOW && y == Status.HIGH)
@@ -101,9 +104,8 @@ public class Percolation {
        else if(x == Status.MEDIUM && y == Status.LOW)
            return Side.ML;            
        else
-           return Side.NA;    
-           */
-
+           return Side.NA;
+       /*
        if(x == Status.HIGH && y == Status.HIGH)
        {
            System.out.println("LR");
@@ -150,7 +152,7 @@ public class Percolation {
            System.out.println("NA");
            return Side.NA;    
        }
-       
+                  */
    }
    
    public Node root(Node p) // return Node value for type consistency
@@ -207,7 +209,11 @@ public class Percolation {
        {
            row--; col--; // adjust for arrays
            // need to check if the node is connected to a top row node. grid[0][0-n]
-           return true;
+           for(int j=0; j<val; j++)
+           {
+               if(connected(grid[row][col], grid[0][j])) return true;
+           }
+           return false;
        }   
        else throw new IllegalArgumentException();
    }
@@ -230,8 +236,14 @@ public class Percolation {
    public boolean percolates() // does the system percolate?
    {
        // scan top row to see if any are connected to bottom row
-       
-       return true;
+       for(int i=0; i < val; i++)
+       {           
+           for(int j=0; j < val; j++)
+           {
+               if(connected(grid[val-1][i], grid[0][j])) return true;
+           }
+       }
+       return false;
    }
    
    private boolean rangeCheck(int row, int col, int min, int max) // does value fit between range?
@@ -257,7 +269,7 @@ public class Percolation {
        }
        
        System.out.println("-----------------------------------");
-       
+       /*
        for(int i=0;i<val;i++)
        {
            for(int j=0;j<val;j++)
@@ -265,7 +277,21 @@ public class Percolation {
                System.out.print("[" + sz[i][j] + "] ");
            }
            System.out.println();
+       }*/
+       for(int i=0;i<val;i++)
+       {
+           for(int j=0;j<val;j++)
+           {
+               System.out.print("[");
+               if(grid[i][j].stat)
+                   System.out.print("-ON");
+               else
+                   System.out.print("OFF");
+               System.out.print("] ");
+           }
+           System.out.println();
        }
+       
    }
       
    public static void main(String[] args) // test client (optional)
@@ -286,16 +312,20 @@ public class Percolation {
        myPerc.isFull(1, 9);
        myPerc.isOpen(1, 1);
        */
-       myPerc.open(9, 9);
-       myPerc.open(9,8);
-       myPerc.open(7,8);
-       myPerc.open(8,8);
+       
+       for(int i=1;i<= 8;i++) myPerc.open(i,1);
+       myPerc.open(8,2);
+       myPerc.open(9,2);
        
        myPerc.outputRoots();
+       
+       if(myPerc.percolates())
+           System.out.println("Percolation Confirmed");
+       else
+           System.out.println("No Percolation Spotted");
        /*
        System.out.println("-----------------------------");
        System.out.println("Percolation Check Complete");
        */
-       System.out.println("Percolation Check Complete");
    }            
 }
