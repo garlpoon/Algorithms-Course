@@ -6,9 +6,7 @@
 // Write a program to estimate the value of the percolation threshold via Monte Carlo simulation.
 // http://coursera.cs.princeton.edu/algs4/assignments/percolation.html
 
-import edu.princeton.cs.algs4.StdRandom;
-import edu.princeton.cs.algs4.StdStats;
-import edu.princeton.cs.algs4.WeightedQuickUnionUF;
+//import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 
@@ -105,54 +103,6 @@ public class Percolation {
            return Side.ML;            
        else
            return Side.NA;
-       /*
-       if(x == Status.HIGH && y == Status.HIGH)
-       {
-           System.out.println("LR");
-           return Side.LR;
-       }
-       else if(x == Status.LOW && y == Status.HIGH)       
-       {
-           System.out.println("UR");
-           return Side.UR; 
-       }
-      
-       else if(x == Status.HIGH && y == Status.LOW)
-       {
-           System.out.println("LL");
-           return Side.LL;    
-       }
-       else if(x == Status.LOW && y == Status.LOW)
-       {
-           System.out.println("UL");
-           return Side.UL;  
-       }          
-       else if(x == Status.HIGH && y == Status.MEDIUM)
-       {
-           System.out.println("LM");
-           return Side.LM;    
-       }
-       else if(x == Status.LOW && y == Status.MEDIUM)
-       {
-           System.out.println("UM");
-           return Side.UM;     
-       }       
-       else if(x == Status.MEDIUM && y == Status.HIGH)
-       {
-           System.out.println("MR");
-           return Side.MR;            
-       }
-       else if(x == Status.MEDIUM && y == Status.LOW)
-       {
-           System.out.println("ML");
-           return Side.ML;   
-       }         
-       else
-       {
-           System.out.println("NA");
-           return Side.NA;    
-       }
-                  */
    }
    
    public Node root(Node p) // return Node value for type consistency
@@ -161,7 +111,6 @@ public class Percolation {
        {
            Node n = grid[p.row][p.col];
            grid[p.row][p.col] = grid[n.row][n.col];
-           //grid[p.row][p.col] = grid[grid[p.row][p.col].row][grid[p.row][p.col].col];
            p = grid[p.row][p.col];
        }
        return p;                  
@@ -208,7 +157,6 @@ public class Percolation {
        if(rangeCheck(row, col, 1, val))
        {
            row--; col--; // adjust for arrays
-           // need to check if the node is connected to a top row node. grid[0][0-n]
            for(int j=0; j<val; j++)
            {
                if(connected(grid[row][col], grid[0][j])) return true;
@@ -236,13 +184,9 @@ public class Percolation {
    public boolean percolates() // does the system percolate?
    {
        // scan top row to see if any are connected to bottom row
-       for(int i=0; i < val; i++)
-       {           
-           for(int j=0; j < val; j++)
-           {
-               if(connected(grid[val-1][i], grid[0][j])) return true;
-           }
-       }
+       for(int i=0; i < val; i++) for(int j=0; j < val; j++) 
+           if(connected(grid[val-1][i], grid[0][j])) return true;
+       
        return false;
    }
    
@@ -269,15 +213,7 @@ public class Percolation {
        }
        
        System.out.println("-----------------------------------");
-       /*
-       for(int i=0;i<val;i++)
-       {
-           for(int j=0;j<val;j++)
-           {
-               System.out.print("[" + sz[i][j] + "] ");
-           }
-           System.out.println();
-       }*/
+
        for(int i=0;i<val;i++)
        {
            for(int j=0;j<val;j++)
@@ -291,29 +227,14 @@ public class Percolation {
            }
            System.out.println();
        }
-       
    }
       
    public static void main(String[] args) // test client (optional)
    {
        Percolation myPerc = new Percolation(9);
-       /*
-       myPerc.open(8,9); // bot
-       myPerc.open(5,1); // up
-       
-       myPerc.open(1,3); // lef
-       myPerc.open(9,5); // rig
-       
-       myPerc.open(9,9); // lr
-       myPerc.open(1,9); // ll
-       myPerc.open(9,1); // ur
-       myPerc.open(1,1); // ul
-       
-       myPerc.isFull(1, 9);
-       myPerc.isOpen(1, 1);
-       */
-       
-       for(int i=1;i<= 8;i++) myPerc.open(i,1);
+
+       for(int i=1;i<= 9;i++) myPerc.open(i,3);
+       for(int i=1;i<= 9;i++) myPerc.open(i,2);
        myPerc.open(8,2);
        myPerc.open(9,2);
        
@@ -323,9 +244,5 @@ public class Percolation {
            System.out.println("Percolation Confirmed");
        else
            System.out.println("No Percolation Spotted");
-       /*
-       System.out.println("-----------------------------");
-       System.out.println("Percolation Check Complete");
-       */
    }            
 }
