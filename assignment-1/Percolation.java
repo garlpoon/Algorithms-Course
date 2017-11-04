@@ -13,6 +13,7 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 public class Percolation {
 
    private Node[][] grid;
+   private int[][] sz;
    private int val;
    
    public enum Status {
@@ -27,10 +28,14 @@ public class Percolation {
    {
        if(n < 1) throw new IllegalArgumentException();
        grid = new Node[n][n]; 
+       sz = new int[n][n]; 
        val = n;
        
        for(int i=0; i < n; i++) for(int j=0; j < n; j++) 
+       {
            grid[i][j] = new Node(i, j);
+           sz[i][j] = 1;
+       }
    }
   
    public void open(int row, int col) // open site (row, col) if it is not open already
@@ -41,6 +46,87 @@ public class Percolation {
        {
            row--; col--; // adjust for arrays
            grid[row][col].stat = true;
+           /*
+           switch(status)
+           {
+               case UL:
+                   if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
+                   if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
+                   if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
+                   if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);
+                   break;               
+               case UR:
+                   if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
+                   if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
+                   if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
+                   if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);           
+                   break;               
+               case LL:
+                   if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
+                   if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
+                   if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
+                   if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);           
+                   break;               
+               case LR:
+                   if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
+                   if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
+                   if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
+                   if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);
+                   break;               
+               case ML:
+                   if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
+                   if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
+                   if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
+                   if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);
+                   break;               
+               case MR:
+                   if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
+                   if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
+                   if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
+                   if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);                  
+                   break;               
+               case UM:
+                   if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
+                   if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
+                   if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
+                   if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);
+                   break;               
+               case LM:
+                   if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
+                   if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
+                   if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
+                   if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);
+                   break;    
+               default:
+                   if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
+                   if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
+                   if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
+                   if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);
+                   break;
+
+           }
+           
+           */
+           
+           if(status != Side.UR && status != Side.LR && status != Side.MR)
+           {
+               if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
+           }
+           
+           if(status != Side.UL && status != Side.LL && status != Side.ML)
+           {
+               if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
+           }   
+           
+           if(status != Side.LL && status != Side.LR && status != Side.LM)
+           {
+               if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
+           }              
+           
+           if(status != Side.UL && status != Side.UR && status != Side.UM)
+           {
+               if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);
+           }   
            
            // connect branches => check north, south, east, west
            // check the range, then see if they're open, if so, use quick union to match the row, col
@@ -61,7 +147,7 @@ public class Percolation {
        
        if(col >= val) y = Status.HIGH;
        else if(col <= 1) y = Status.LOW;
-       
+       /*
        if(x == Status.HIGH && y == Status.HIGH)
            return Side.LR;
        else if(x == Status.LOW && y == Status.HIGH)
@@ -80,7 +166,7 @@ public class Percolation {
            return Side.UM;            
        else
            return Side.NA;    
-       /*
+           */
        if(x == Status.HIGH && y == Status.HIGH)
        {           
            System.out.println("LR");
@@ -131,7 +217,7 @@ public class Percolation {
            System.out.println("NA");
            return Side.NA;     
        }
-       */
+       
    }
    
    public Node root(Node p) // return Node value for type consistency
@@ -150,7 +236,21 @@ public class Percolation {
    {
        // to-do: implement a union system where the bigger sized tree hooks onto the smaller sized tree
        Node i = root(p);
-       grid[i.row][i.col]= root(q);
+       Node j = root(q);
+       
+       if(i != j)
+       {
+           if(sz[i.row][i.col] < sz[j.row][j.col])
+           {
+               grid[i.row][i.col] = j;
+               sz[i.row][i.col] += sz[j.row][j.col];
+           }
+           else
+           {
+               grid[j.row][j.col] = i;
+               sz[j.row][j.col] += sz[i.row][i.col];
+           }
+       }
    }
    
    public boolean isOpen(int row, int col) // is site (row, col) open?
@@ -208,11 +308,6 @@ public class Percolation {
    
    public void outputRoots()
    {
-       /*
-       union(grid[0][1], grid[0][0]);
-       union(grid[0][1], grid[5][0]);
-       union(grid[2][5], grid[5][0]);
-       */
        
        for(int i=0;i<val;i++)
        {
@@ -222,12 +317,23 @@ public class Percolation {
            }
            System.out.println();
        }
+       
+       System.out.println("-----------------------------------");
+       
+       for(int i=0;i<val;i++)
+       {
+           for(int j=0;j<val;j++)
+           {
+               System.out.print("[" + sz[i][j] + "] ");
+           }
+           System.out.println();
+       }
    }
       
    public static void main(String[] args) // test client (optional)
    {
        Percolation myPerc = new Percolation(9);
-
+       /*
        myPerc.open(8,9); // bot
        myPerc.open(5,1); // up
        
@@ -241,8 +347,11 @@ public class Percolation {
        
        myPerc.isFull(1, 9);
        myPerc.isOpen(1, 1);
+       */
+       myPerc.open(9, 9);
+       myPerc.open(8,9);
        
-       //myPerc.outputRoots();
+       myPerc.outputRoots();
        /*
        System.out.println("-----------------------------");
        System.out.println("Percolation Check Complete");
