@@ -49,25 +49,25 @@ public class Percolation {
            
            if(status != Side.UR && status != Side.LR && status != Side.MR)
            {
-               System.out.println("r + 1 -> currently: " + row + ", " + col);
+               //System.out.println("r + 1 -> currently: " + row + ", " + col);
                if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
            }
            
            if(status != Side.UL && status != Side.LL && status != Side.ML)
            {
-               System.out.println("r - 1 -> currently: " + row + ", " + col);
+               //System.out.println("r - 1 -> currently: " + row + ", " + col);
                if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);
            }   
            
            if(status != Side.LL && status != Side.LR && status != Side.LM)
            {
-               System.out.println("c + 1 -> currently: " + row + ", " + col);
+               //System.out.println("c + 1 -> currently: " + row + ", " + col);
                if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
            }              
            
            if(status != Side.UL && status != Side.UR && status != Side.UM)
            {
-               System.out.println("c - 1 -> currently: " + row + ", " + col);
+               //System.out.println("c - 1 -> currently: " + row + ", " + col);
                if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
            }   
        }
@@ -156,7 +156,12 @@ public class Percolation {
    public Node root(Node p) // return Node value for type consistency
    {       
        while(p.row != grid[p.row][p.col].row || p.col != grid[p.row][p.col].col)
+       {
+           Node n = grid[p.row][p.col];
+           grid[p.row][p.col] = grid[n.row][n.col];
+           //grid[p.row][p.col] = grid[grid[p.row][p.col].row][grid[p.row][p.col].col];
            p = grid[p.row][p.col];
+       }
        return p;                  
    }
    
