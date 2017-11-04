@@ -46,94 +46,30 @@ public class Percolation {
        {
            row--; col--; // adjust for arrays
            grid[row][col].stat = true;
-           /*
-           switch(status)
-           {
-               case UL:
-                   if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
-                   if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
-                   if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
-                   if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);
-                   break;               
-               case UR:
-                   if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
-                   if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
-                   if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
-                   if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);           
-                   break;               
-               case LL:
-                   if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
-                   if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
-                   if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
-                   if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);           
-                   break;               
-               case LR:
-                   if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
-                   if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
-                   if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
-                   if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);
-                   break;               
-               case ML:
-                   if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
-                   if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
-                   if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
-                   if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);
-                   break;               
-               case MR:
-                   if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
-                   if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
-                   if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
-                   if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);                  
-                   break;               
-               case UM:
-                   if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
-                   if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
-                   if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
-                   if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);
-                   break;               
-               case LM:
-                   if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
-                   if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
-                   if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
-                   if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);
-                   break;    
-               default:
-                   if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
-                   if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
-                   if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
-                   if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);
-                   break;
-
-           }
-           
-           */
            
            if(status != Side.UR && status != Side.LR && status != Side.MR)
            {
-               if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
+               System.out.println("r + 1 -> currently: " + row + ", " + col);
+               if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
            }
            
            if(status != Side.UL && status != Side.LL && status != Side.ML)
            {
-               if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
+               System.out.println("r - 1 -> currently: " + row + ", " + col);
+               if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);
            }   
            
            if(status != Side.LL && status != Side.LR && status != Side.LM)
            {
-               if(grid[row][col + 1].stat) union(grid[row][col], grid[row][col + 1]);
+               System.out.println("c + 1 -> currently: " + row + ", " + col);
+               if(grid[row + 1][col].stat) union(grid[row][col], grid[row + 1][col]);
            }              
            
            if(status != Side.UL && status != Side.UR && status != Side.UM)
            {
-               if(grid[row][col - 1].stat) union(grid[row][col], grid[row][col - 1]);
+               System.out.println("c - 1 -> currently: " + row + ", " + col);
+               if(grid[row - 1][col].stat) union(grid[row][col], grid[row - 1][col]);
            }   
-           
-           // connect branches => check north, south, east, west
-           // check the range, then see if they're open, if so, use quick union to match the row, col
-           //if(grid[row-1][col].stat)
-           //{
-               
-           //}
        }
        else throw new IllegalArgumentException();
    }
@@ -151,71 +87,68 @@ public class Percolation {
        if(x == Status.HIGH && y == Status.HIGH)
            return Side.LR;
        else if(x == Status.LOW && y == Status.HIGH)
-           return Side.LL;       
+           return Side.UR;       
        else if(x == Status.HIGH && y == Status.LOW)
-           return Side.UR;    
+           return Side.LL;    
        else if(x == Status.LOW && y == Status.LOW)
            return Side.UL;            
        else if(x == Status.HIGH && y == Status.MEDIUM)
-           return Side.MR;    
+           return Side.LM;    
        else if(x == Status.LOW && y == Status.MEDIUM)
-           return Side.ML;            
-       else if(x == Status.MEDIUM && y == Status.HIGH)
-           return Side.LM;            
-       else if(x == Status.MEDIUM && y == Status.LOW)
            return Side.UM;            
+       else if(x == Status.MEDIUM && y == Status.HIGH)
+           return Side.MR;            
+       else if(x == Status.MEDIUM && y == Status.LOW)
+           return Side.ML;            
        else
            return Side.NA;    
            */
+
        if(x == Status.HIGH && y == Status.HIGH)
-       {           
+       {
            System.out.println("LR");
            return Side.LR;
        }
-       else if(x == Status.LOW && y == Status.HIGH)
+       else if(x == Status.LOW && y == Status.HIGH)       
        {
-           System.out.println("LL");
-           return Side.LL;   
-       }
-    
-       else if(x == Status.HIGH && y == Status.LOW)
-       {           
            System.out.println("UR");
-           return Side.UR;    
-       }
-
-       else if(x == Status.LOW && y == Status.LOW)
-       {           
-           System.out.println("UL");
-           return Side.UL;            
-       }
-
-       else if(x == Status.HIGH && y == Status.MEDIUM)
-       {
-           System.out.println("MR");
-           return Side.MR;  
-       }  
-       else if(x == Status.LOW && y == Status.MEDIUM)
-       {
-           System.out.println("ML");
-           return Side.ML;      
+           return Side.UR; 
        }
       
-       else if(x == Status.MEDIUM && y == Status.HIGH)
+       else if(x == Status.HIGH && y == Status.LOW)
+       {
+           System.out.println("LL");
+           return Side.LL;    
+       }
+       else if(x == Status.LOW && y == Status.LOW)
+       {
+           System.out.println("UL");
+           return Side.UL;  
+       }          
+       else if(x == Status.HIGH && y == Status.MEDIUM)
        {
            System.out.println("LM");
-           return Side.LM;            
+           return Side.LM;    
        }
-       else if(x == Status.MEDIUM && y == Status.LOW)
+       else if(x == Status.LOW && y == Status.MEDIUM)
        {
            System.out.println("UM");
            return Side.UM;     
+       }       
+       else if(x == Status.MEDIUM && y == Status.HIGH)
+       {
+           System.out.println("MR");
+           return Side.MR;            
        }
-       
+       else if(x == Status.MEDIUM && y == Status.LOW)
+       {
+           System.out.println("ML");
+           return Side.ML;   
+       }         
        else
        {
            System.out.println("NA");
-           return Side.NA;     
+           return Side.NA;    
        }
        
    }
@@ -349,7 +282,9 @@ public class Percolation {
        myPerc.isOpen(1, 1);
        */
        myPerc.open(9, 9);
-       myPerc.open(8,9);
+       myPerc.open(9,8);
+       myPerc.open(7,8);
+       myPerc.open(8,8);
        
        myPerc.outputRoots();
        /*
