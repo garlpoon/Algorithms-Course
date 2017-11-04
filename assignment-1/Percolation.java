@@ -35,32 +35,7 @@ public class Percolation {
   
    public void open(int row, int col) // open site (row, col) if it is not open already
    {
-       Status x = Status.MEDIUM, y = Status.MEDIUM;
-       
-       if(row >= val) x = Status.HIGH;
-       else if(row <= 1) x = Status.LOW;
-       
-       if(col >= val) y = Status.HIGH;
-       else if(col <= 1) y = Status.LOW;
-       
-       if(x == Status.HIGH && y == Status.HIGH)
-           System.out.println("Bottom Right Corner");
-       else if(x == Status.HIGH && y == Status.LOW)
-           System.out.println("Upper Right Corner");       
-       else if(x == Status.HIGH && y == Status.MEDIUM)
-           System.out.println("Right Side");       
-       else if(x == Status.LOW && y == Status.HIGH)
-           System.out.println("Bottom Left Corner");       
-       else if(x == Status.LOW && y == Status.LOW)
-           System.out.println("Upper Left Corner");       
-       else if(x == Status.LOW && y == Status.MEDIUM)
-           System.out.println("Left Side");
-       else if(x == Status.MEDIUM && y == Status.HIGH)
-           System.out.println("Bottom Side");       
-       else if(x == Status.MEDIUM && y == Status.LOW)
-           System.out.println("Upper Side");
-       else
-           System.out.println("Normal");
+       Side status = edgeDetect(row, col);
        
        if(rangeCheck(row, col, 1, val))
        {
@@ -75,6 +50,88 @@ public class Percolation {
            //}
        }
        else throw new IllegalArgumentException();
+   }
+   
+   private Side edgeDetect(int row, int col)
+   {
+       Status x = Status.MEDIUM, y = Status.MEDIUM;
+       
+       if(row >= val) x = Status.HIGH; 
+       else if(row <= 1) x = Status.LOW;
+       
+       if(col >= val) y = Status.HIGH;
+       else if(col <= 1) y = Status.LOW;
+       
+       if(x == Status.HIGH && y == Status.HIGH)
+           return Side.LR;
+       else if(x == Status.LOW && y == Status.HIGH)
+           return Side.LL;       
+       else if(x == Status.HIGH && y == Status.LOW)
+           return Side.UR;    
+       else if(x == Status.LOW && y == Status.LOW)
+           return Side.UL;            
+       else if(x == Status.HIGH && y == Status.MEDIUM)
+           return Side.MR;    
+       else if(x == Status.LOW && y == Status.MEDIUM)
+           return Side.ML;            
+       else if(x == Status.MEDIUM && y == Status.HIGH)
+           return Side.LM;            
+       else if(x == Status.MEDIUM && y == Status.LOW)
+           return Side.UM;            
+       else
+           return Side.NA;    
+       /*
+       if(x == Status.HIGH && y == Status.HIGH)
+       {           
+           System.out.println("LR");
+           return Side.LR;
+       }
+       else if(x == Status.LOW && y == Status.HIGH)
+       {
+           System.out.println("LL");
+           return Side.LL;   
+       }
+    
+       else if(x == Status.HIGH && y == Status.LOW)
+       {           
+           System.out.println("UR");
+           return Side.UR;    
+       }
+
+       else if(x == Status.LOW && y == Status.LOW)
+       {           
+           System.out.println("UL");
+           return Side.UL;            
+       }
+
+       else if(x == Status.HIGH && y == Status.MEDIUM)
+       {
+           System.out.println("MR");
+           return Side.MR;  
+       }  
+       else if(x == Status.LOW && y == Status.MEDIUM)
+       {
+           System.out.println("ML");
+           return Side.ML;      
+       }
+      
+       else if(x == Status.MEDIUM && y == Status.HIGH)
+       {
+           System.out.println("LM");
+           return Side.LM;            
+       }
+       else if(x == Status.MEDIUM && y == Status.LOW)
+       {
+           System.out.println("UM");
+           return Side.UM;     
+       }
+       
+       else
+       {
+           System.out.println("NA");
+           return Side.NA;     
+       }
+       */
    }
    
    public Node root(Node p) // return Node value for type consistency
@@ -190,5 +247,6 @@ public class Percolation {
        System.out.println("-----------------------------");
        System.out.println("Percolation Check Complete");
        */
+       System.out.println("Percolation Check Complete");
    }            
 }
