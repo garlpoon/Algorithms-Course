@@ -15,17 +15,53 @@ public class Percolation {
    private Node[][] grid;
    private int val;
    
+   public enum Status {
+       LOW, MEDIUM, HIGH
+   }
+   
+   public enum Side {
+       UL, UR, LL, LR, ML, MR, UM, LM, NA
+   }
+   
    public Percolation(int n) // create n-by-n grid, with all sites blocked
    {
        if(n < 1) throw new IllegalArgumentException();
        grid = new Node[n][n]; 
        val = n;
        
-       for(int i=0; i < n; i++) for(int j=0; j < n; j++) grid[i][j] = new Node(i, j);
+       for(int i=0; i < n; i++) for(int j=0; j < n; j++) 
+           grid[i][j] = new Node(i, j);
    }
   
    public void open(int row, int col) // open site (row, col) if it is not open already
    {
+       Status x = Status.MEDIUM, y = Status.MEDIUM;
+       
+       if(row >= val) x = Status.HIGH;
+       else if(row <= 1) x = Status.LOW;
+       
+       if(col >= val) y = Status.HIGH;
+       else if(col <= 1) y = Status.LOW;
+       
+       if(x == Status.HIGH && y == Status.HIGH)
+           System.out.println("Bottom Right Corner");
+       else if(x == Status.HIGH && y == Status.LOW)
+           System.out.println("Upper Right Corner");       
+       else if(x == Status.HIGH && y == Status.MEDIUM)
+           System.out.println("Right Side");       
+       else if(x == Status.LOW && y == Status.HIGH)
+           System.out.println("Bottom Left Corner");       
+       else if(x == Status.LOW && y == Status.LOW)
+           System.out.println("Upper Left Corner");       
+       else if(x == Status.LOW && y == Status.MEDIUM)
+           System.out.println("Left Side");
+       else if(x == Status.MEDIUM && y == Status.HIGH)
+           System.out.println("Bottom Side");       
+       else if(x == Status.MEDIUM && y == Status.LOW)
+           System.out.println("Upper Side");
+       else
+           System.out.println("Normal");
+       
        if(rangeCheck(row, col, 1, val))
        {
            row--; col--; // adjust for arrays
@@ -33,7 +69,10 @@ public class Percolation {
            
            // connect branches => check north, south, east, west
            // check the range, then see if they're open, if so, use quick union to match the row, col
-           
+           //if(grid[row-1][col].stat)
+           //{
+               
+           //}
        }
        else throw new IllegalArgumentException();
    }
@@ -112,9 +151,11 @@ public class Percolation {
    
    public void outputRoots()
    {
+       /*
        union(grid[0][1], grid[0][0]);
        union(grid[0][1], grid[5][0]);
        union(grid[2][5], grid[5][0]);
+       */
        
        for(int i=0;i<val;i++)
        {
@@ -129,11 +170,22 @@ public class Percolation {
    public static void main(String[] args) // test client (optional)
    {
        Percolation myPerc = new Percolation(9);
-       myPerc.open(1,9);
+
+       myPerc.open(8,9); // bot
+       myPerc.open(5,1); // up
+       
+       myPerc.open(1,3); // lef
+       myPerc.open(9,5); // rig
+       
+       myPerc.open(9,9); // lr
+       myPerc.open(1,9); // ll
+       myPerc.open(9,1); // ur
+       myPerc.open(1,1); // ul
+       
        myPerc.isFull(1, 9);
        myPerc.isOpen(1, 1);
        
-       myPerc.outputRoots();
+       //myPerc.outputRoots();
        /*
        System.out.println("-----------------------------");
        System.out.println("Percolation Check Complete");
