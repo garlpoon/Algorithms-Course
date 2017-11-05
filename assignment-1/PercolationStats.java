@@ -71,18 +71,18 @@ public class PercolationStats {
    public double confidenceLo()                  // low  endpoint of 95% confidence interval
    {
        double diff = (1.96*StdStats.stddev(mean_arr))/Math.sqrt(mean_arr.length);
-       return myStats.mean() - diff;
+       return StdStats.mean(mean_arr) - diff;
    }
    
    public double confidenceHi()                  // high endpoint of 95% confidence interval
    {
        double diff = (1.96*StdStats.stddev(mean_arr))/Math.sqrt(mean_arr.length);
-       return myStats.mean() + diff;
+       return StdStats.mean(mean_arr) + diff;
    }
    
    public static void main(String[] args)        // test client (described below)
    {
-       PercolationStats myStats = new PercolationStats(200, 100);
+       PercolationStats myStats = new PercolationStats(2, 100000);
        System.out.println("mean                    = " + myStats.mean());
        System.out.println("stddev                  = " + myStats.stddev());
        System.out.println("95% confidence interval = [" + myStats.confidenceLo() + ", " + myStats.confidenceHi()+ "]");
