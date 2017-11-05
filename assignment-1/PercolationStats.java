@@ -29,7 +29,7 @@ public class PercolationStats {
        for(int i=0;i<trials;i++)
        {
            end_flag = false; cnt = 0;
-           //while(!end_flag && cnt >= max_steps)
+           
            while(!end_flag)
            {
                while(trial_set.isOpen(x, y)) // loop until fresh x & y is found
@@ -38,7 +38,6 @@ public class PercolationStats {
                    y = StdRandom.uniform(1, n+1);
                }
                
-               //System.out.println(x + " " + y);
                trial_set.open(x,y);
                cnt++;
                
@@ -46,10 +45,8 @@ public class PercolationStats {
                {
                    end_flag = true;
                }
-               
            }
            
-           //trial_set.outputRoots();
            trial_set = new Percolation(n); // reset
            mean_arr[i] = cnt/max_steps;
            
@@ -59,7 +56,6 @@ public class PercolationStats {
    }
    public double mean()                          // sample mean of percolation threshold
    {
-       //System.out.println(mean_sum + "---------" + trial_num);
        return StdStats.mean(mean_arr);
    }
    
@@ -70,19 +66,19 @@ public class PercolationStats {
    
    public double confidenceLo()                  // low  endpoint of 95% confidence interval
    {
-       double diff = (1.96*StdStats.stddev(mean_arr))/Math.sqrt(mean_arr.length);
+       double diff = (1.96 * StdStats.stddev(mean_arr)) / Math.sqrt(mean_arr.length);
        return StdStats.mean(mean_arr) - diff;
    }
    
    public double confidenceHi()                  // high endpoint of 95% confidence interval
    {
-       double diff = (1.96*StdStats.stddev(mean_arr))/Math.sqrt(mean_arr.length);
+       double diff = (1.96 * StdStats.stddev(mean_arr)) / Math.sqrt(mean_arr.length);
        return StdStats.mean(mean_arr) + diff;
    }
    
    public static void main(String[] args)        // test client (described below)
    {
-       PercolationStats myStats = new PercolationStats(2, 100000);
+       PercolationStats myStats = new PercolationStats(2, 10000);
        System.out.println("mean                    = " + myStats.mean());
        System.out.println("stddev                  = " + myStats.stddev());
        System.out.println("95% confidence interval = [" + myStats.confidenceLo() + ", " + myStats.confidenceHi()+ "]");
