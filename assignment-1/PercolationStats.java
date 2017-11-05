@@ -11,16 +11,15 @@ import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
    
-   private double mean_sum = 0;
-   private int trial_num;
+   private double[] mean_arr;
    
    public PercolationStats(int n, int trials)    // perform trials independent experiments on an n-by-n grid
    {
        Percolation trial_set = new Percolation(n);
        
-       int cnt = 0;
-       double max_steps = n*n; 
-       trial_num = trials;
+       mean_arr = new double[trials];
+       int cnt = 0, j = 0;
+       double max_steps = n*n;
        
        int x = StdRandom.uniform(1, n+1), 
            y = StdRandom.uniform(1, n+1);
@@ -50,17 +49,18 @@ public class PercolationStats {
                
            }
            
-           trial_set.outputRoots();
+           //trial_set.outputRoots();
            trial_set = new Percolation(n); // reset
-           mean_sum += cnt/max_steps;
+           mean_arr[i] = cnt/max_steps;
            
-           System.out.println("Current trial: " + i+1);
+           j = i + 1;
+           System.out.println(j);
        }
    }
    public double mean()                          // sample mean of percolation threshold
    {
        //System.out.println(mean_sum + "---------" + trial_num);
-       return mean_sum/trial_num;
+       return StdStats.mean(mean_arr);
    }
    
    /*
@@ -78,7 +78,7 @@ public class PercolationStats {
 */
    public static void main(String[] args)        // test client (described below)
    {
-       PercolationStats myStats = new PercolationStats(15, 50);
+       PercolationStats myStats = new PercolationStats(200, 100);
        System.out.println("Mean output: " + myStats.mean());
    }
 }
