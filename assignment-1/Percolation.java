@@ -202,7 +202,7 @@ public class Percolation {
    
    public void outputRoots()
    {
-       
+       /*
        for(int i=0;i<val;i++)
        {
            for(int j=0;j<val;j++)
@@ -213,7 +213,7 @@ public class Percolation {
        }
        
        System.out.println("-----------------------------------");
-
+       */
        for(int i=0;i<val;i++)
        {
            for(int j=0;j<val;j++)
