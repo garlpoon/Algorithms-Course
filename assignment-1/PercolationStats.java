@@ -16,22 +16,32 @@ public class PercolationStats {
    public PercolationStats(int n, int trials)    // perform trials independent experiments on an n-by-n grid
    {
        Percolation trial_set = new Percolation(n);
-       int max_steps = n*n, cnt = 0;
+       int max_steps = n*n, cnt = 0, mean_sum;
        boolean end_flag = false;
+       int x = StdRandom.uniform(1, n-1), y = StdRandom.uniform(1, n-1);
+       
+       System.out.println(x + " " + y);
        
        for(int i=0;i<trials;i++)
        {
-           end_flag = false; cnt = 0;
-           while(!end_flag && cnt >= max_steps)
+           end_flag = false; cnt = mean_sum = 0; 
+           //while(!end_flag && cnt >= max_steps)
+           while(!end_flag)
            {
-               
                cnt++;
+               // continuously choose random x y coordinates to open
+               
+               
+               if(trial_set.percolates())
+                   end_flag = true;
            }
+           
+           mean_sum += cnt/max_steps;
        }
    }
    public double mean()                          // sample mean of percolation threshold
    {
-       return trial_num/mean_sum;
+       return mean_sum/trial_num;
    }
    
    /*
@@ -49,5 +59,7 @@ public class PercolationStats {
 */
    public static void main(String[] args)        // test client (described below)
    {
+       PercolationStats myStats = new PercolationStats(100, 100);
+       
    }
 }
