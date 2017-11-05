@@ -238,7 +238,7 @@ public class Percolation {
        myPerc.open(8,2);
        myPerc.open(9,2);
        
-       myPerc.outputRoots();
+       //myPerc.outputRoots();
        
        if(myPerc.percolates())
            System.out.println("Percolation Confirmed");

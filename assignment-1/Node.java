@@ -7,7 +7,7 @@
 // http://coursera.cs.princeton.edu/algs4/assignments/percolation.html
 
 public class Node {
-	
+    
    boolean stat = false;
    int row;
    int col;
