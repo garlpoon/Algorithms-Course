@@ -11,14 +11,17 @@ import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
    
-   private int trial_num, mean_sum;
+   private double mean_sum = 0;
+   private int trial_num;
    
    public PercolationStats(int n, int trials)    // perform trials independent experiments on an n-by-n grid
    {
        Percolation trial_set = new Percolation(n);
        
-       int max_steps = n*n, cnt = 0, mean_sum;
-              
+       int cnt = 0;
+       double max_steps = n*n; 
+       trial_num = trials;
+       
        int x = StdRandom.uniform(1, n+1), 
            y = StdRandom.uniform(1, n+1);
        
@@ -26,7 +29,7 @@ public class PercolationStats {
               
        for(int i=0;i<trials;i++)
        {
-           end_flag = false; cnt = mean_sum = 0; 
+           end_flag = false; cnt = 0;
            //while(!end_flag && cnt >= max_steps)
            while(!end_flag)
            {
@@ -36,24 +39,27 @@ public class PercolationStats {
                    y = StdRandom.uniform(1, n+1);
                }
                
-               System.out.println(x + " " + y);
+               //System.out.println(x + " " + y);
                trial_set.open(x,y);
                cnt++;
                
                if(trial_set.percolates())
                {
                    end_flag = true;
-                   trial_set.outputRoots();
-                   trial_set = new Percolation(n); // reset
                }
                
            }
            
+           trial_set.outputRoots();
+           trial_set = new Percolation(n); // reset
            mean_sum += cnt/max_steps;
+           
+           System.out.println("Current trial: " + i+1);
        }
    }
    public double mean()                          // sample mean of percolation threshold
    {
+       //System.out.println(mean_sum + "---------" + trial_num);
        return mean_sum/trial_num;
    }
    
@@ -72,7 +78,7 @@ public class PercolationStats {
 */
    public static void main(String[] args)        // test client (described below)
    {
-       PercolationStats myStats = new PercolationStats(15, 100);
-       
+       PercolationStats myStats = new PercolationStats(15, 50);
+       System.out.println("Mean output: " + myStats.mean());
    }
 }
