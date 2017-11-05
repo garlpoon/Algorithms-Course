@@ -9,7 +9,20 @@
 //import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-
+    
+   public class Node 
+   {
+       boolean stat = false;
+       int row;
+       int col;
+       
+       Node(int r, int c)
+       {
+           row = r;
+           col = c;
+       }
+   }
+   
    private Node[][] grid;
    private int[][] sz;
    private int val;
