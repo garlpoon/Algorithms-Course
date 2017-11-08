@@ -6,7 +6,7 @@
 // Write a program to estimate the value of the percolation threshold via Monte Carlo simulation.
 // http://coursera.cs.princeton.edu/algs4/assignments/percolation.html
 
-// import edu.princeton.cs.algs4.WeightedQuickUnionUF;
+import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
       
