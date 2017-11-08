@@ -6,9 +6,13 @@
 // Write a program to estimate the value of the percolation threshold via Monte Carlo simulation.
 // http://coursera.cs.princeton.edu/algs4/assignments/percolation.html
 
-//import edu.princeton.cs.algs4.WeightedQuickUnionUF;
+// import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
+      
+   private Node[][] grid;
+   private int[][] sz;
+   private final int value;
    
    // Node class is the type used to represent the entire grid used for percolation
    private class Node 
@@ -23,11 +27,7 @@ public class Percolation {
            col = c;
        }
    }
-   
-   private Node[][] grid;
-   private int[][] sz;
-   private final int val;
-   
+
    // Status enum represents basic ranges
    private enum Status {
        LOW, MEDIUM, HIGH
@@ -45,7 +45,7 @@ public class Percolation {
        if (n < 1) throw new IllegalArgumentException();
        grid = new Node[n][n]; 
        sz = new int[n][n]; 
-       val = n;
+       value = n;
        
        for (int i = 0; i < n; i++)
        {
@@ -60,11 +60,12 @@ public class Percolation {
    public void open(int row, int col) // open site (row, col) if it is not open already
    {
        Side status = edgeDetect(row, col);
-       if (grid[row-1][col-1].stat == false)
+       if (!grid[row-1][col-1].stat)
        {
-           if (rangeCheck(row, col, 1, val))
+           if (rangeCheck(row, col, 1, value))
            {
-               row--; col--; // adjust for arrays
+               row--; // adjust for arrays
+               col--; 
                grid[row][col].stat = true;
                
                if (status != Side.UR && status != Side.LR && status != Side.MR)
@@ -87,10 +88,10 @@ public class Percolation {
    {
        Status x = Status.MEDIUM, y = Status.MEDIUM;
        
-       if (row >= val) x = Status.HIGH; 
+       if (row >= value) x = Status.HIGH; 
        else if (row <= 1) x = Status.LOW;
        
-       if (col >= val) y = Status.HIGH;
+       if (col >= value) y = Status.HIGH;
        else if (col <= 1) y = Status.LOW;
        
        if (x == Status.HIGH && y == Status.HIGH)
@@ -126,7 +127,7 @@ public class Percolation {
    
    private boolean connected(Node p, Node q)
    {
-       return root(p) == root(q);
+       return (root(p) == root(q) & p.stat & q.stat);
    }
    
    private void union(Node p, Node q)
@@ -152,9 +153,10 @@ public class Percolation {
    
    public boolean isOpen(int row, int col) // is site (row, col) open?
    {
-       if (rangeCheck(row, col, 1, val))
+       if (rangeCheck(row, col, 1, value))
        {
-           row--; col--; // adjust for arrays
+           row--; // adjust for arrays
+           col--; 
            return grid[row][col].stat;
        }   
        else throw new IllegalArgumentException();
@@ -162,12 +164,17 @@ public class Percolation {
    
    public boolean isFull(int row, int col) // is site (row, col) connected to a node from top row?
    {
-       if (rangeCheck(row, col, 1, val))
+       if (rangeCheck(row, col, 1, value))
        {
-           row--; col--; // adjust for arrays
-           for (int j = 0; j < val; j++)
-               if (connected(grid[row][col], grid[0][j])) return true;
-
+           row--; // adjust for arrays
+           col--; 
+           for (int j = 0; j < value; j++)
+           {
+               if (connected(grid[row][col], grid[0][j])) 
+               {
+                   return true;
+               }
+           }
            return false;
        }   
        else throw new IllegalArgumentException();
@@ -175,24 +182,24 @@ public class Percolation {
    
    public int numberOfOpenSites()// number of open sites
    {
-       int open_cnt = 0;
+       int openCnt = 0;
        
-       for (int i = 0; i < val; i++)
+       for (int i = 0; i < value; i++)
        {
-           for (int j = 0; j < val; j++)
+           for (int j = 0; j < value; j++)
            {
-               if (grid[i][j].stat == true) // check if grid is open
-                   open_cnt++;
+               if (grid[i][j].stat) // check if grid is open
+                   openCnt++;
            }
        }
-       return open_cnt;
+       return openCnt;
    }
    
    // Checks top row to see if any are connected to bottom row to determine if the system percolates?
    public boolean percolates()
    {
-       for (int i=0; i < val; i++) for (int j=0; j < val; j++) 
-           if (connected(grid[val-1][i], grid[0][j])) return true;
+       for (int i = 0; i < value; i++) for (int j = 0; j < value; j++) 
+           if (connected(grid[value-1][i], grid[0][j])) return true;
        return false;
    }
    
@@ -209,9 +216,9 @@ public class Percolation {
    
    private void outputRoots()
    {
-       for (int i = 0; i < val; i++)
+       for (int i = 0; i < value; i++)
        {
-           for (int j = 0; j < val; j++)
+           for (int j = 0; j < value; j++)
            {
                System.out.print("[" + root(grid[i][j]).row + " " + root(grid[i][j]).col + "] ");
            }
@@ -220,9 +227,9 @@ public class Percolation {
        
        System.out.println("-----------------------------------");
        
-       for (int i = 0; i < val; i++)
+       for (int i = 0; i < value; i++)
        {
-           for (int j = 0; j < val; j++)
+           for (int j = 0; j < value; j++)
            {
                System.out.print("[");
                if (grid[i][j].stat)
@@ -239,10 +246,13 @@ public class Percolation {
    {
        Percolation myPerc = new Percolation(9);
 
-       for (int i = 1; i <= 9; i++) myPerc.open(i,3);
-       for (int i = 1; i <= 9; i++) myPerc.open(i,2);
-       myPerc.open(8,2);
-       myPerc.open(9,2);
+       if(myPerc.isFull(1, 1))
+           System.out.println("Full Alert");
+       
+       for (int i = 1; i <= 9; i++) myPerc.open(i, 3);
+       for (int i = 1; i <= 9; i++) myPerc.open(i, 2);
+       myPerc.open(8, 2);
+       myPerc.open(9, 2);
        
        myPerc.outputRoots();
        

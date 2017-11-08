@@ -11,74 +11,76 @@ import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
    
-   private double[] mean_arr;
+   private final double[] meanArr;
    
    public PercolationStats(int n, int trials)    // perform trials independent experiments on an n-by-n grid
    {
-       Percolation trial_set = new Percolation(n);
+       Percolation trialSet = new Percolation(n);
        
-       mean_arr = new double[trials];
-       int cnt = 0, j = 0;
-       double max_steps = n*n;
+       meanArr = new double[trials];
+       int cnt = 0; 
+       // int j = 0;
+       double maxSteps = n*n;
        
        int x = StdRandom.uniform(1, n+1), 
            y = StdRandom.uniform(1, n+1);
        
-       boolean end_flag = false;
+       boolean endFlag = false;
               
-       for(int i=0;i<trials;i++)
+       for (int i = 0; i < trials; i++)
        {
-           end_flag = false; cnt = 0;
+           endFlag = false; 
+           cnt = 0;
            
-           while(!end_flag)
+           while (!endFlag)
            {
-               while(trial_set.isOpen(x, y)) // loop until fresh x & y is found
+               while (trialSet.isOpen(x, y)) // loop until fresh x & y is found
                {
                    x = StdRandom.uniform(1, n+1);
                    y = StdRandom.uniform(1, n+1);
                }
                
-               trial_set.open(x,y);
+               trialSet.open(x, y);
                cnt++;
                
-               if(trial_set.percolates())
+               if (trialSet.percolates())
                {
-                   end_flag = true;
+                   endFlag = true;
                }
            }
            
-           trial_set = new Percolation(n); // reset
-           mean_arr[i] = cnt/max_steps;
+           trialSet = new Percolation(n); // reset
+           meanArr[i] = cnt/maxSteps;
            
-           j = i + 1;
-           System.out.println(j);
+           // j = i + 1;
+           // System.out.println(j);
        }
    }
    public double mean()                          // sample mean of percolation threshold
    {
-       return StdStats.mean(mean_arr);
+       return StdStats.mean(meanArr);
    }
    
    public double stddev()                        // sample standard deviation of percolation threshold
    {
-       return StdStats.stddev(mean_arr);
+       return StdStats.stddev(meanArr);
    }
    
    public double confidenceLo()                  // low  endpoint of 95% confidence interval
    {
-       double diff = (1.96 * StdStats.stddev(mean_arr)) / Math.sqrt(mean_arr.length);
-       return StdStats.mean(mean_arr) - diff;
+       double diff = (1.96 * StdStats.stddev(meanArr)) / Math.sqrt(meanArr.length);
+       return StdStats.mean(meanArr) - diff;
    }
    
    public double confidenceHi()                  // high endpoint of 95% confidence interval
    {
-       double diff = (1.96 * StdStats.stddev(mean_arr)) / Math.sqrt(mean_arr.length);
-       return StdStats.mean(mean_arr) + diff;
+       double diff = (1.96 * StdStats.stddev(meanArr)) / Math.sqrt(meanArr.length);
+       return StdStats.mean(meanArr) + diff;
    }
    
    public static void main(String[] args)        // test client (described below)
    {
-       PercolationStats myStats = new PercolationStats(2, 10000);
+       PercolationStats myStats = new PercolationStats(2, 100000);
        System.out.println("mean                    = " + myStats.mean());
        System.out.println("stddev                  = " + myStats.stddev());
        System.out.println("95% confidence interval = [" + myStats.confidenceLo() + ", " + myStats.confidenceHi()+ "]");
